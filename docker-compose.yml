@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  backend:
+    container_name: "discogs-notifier"
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+  ui:
+    container_name: "discogs-notifier-redis"
+    build: ./ui
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public:/var/www/public:ro
