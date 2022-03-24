@@ -1,5 +1,8 @@
+require('dotenv').config({ path: '/.env.local' });
+const process = require('process');
+
 module.exports = {
-  LISTEN_PORT: 8000,
-  AUTH_DOMAIN: 'dev-dou0tn7i.us.auth0.com',
-  AUTH_AUDIENCE: 'http://api.presidio-movies.com',
+  DISCOGS_BASE_URL: 'https://api.discogs.com',
+  DISCOGS_USERNAME: process.env.DISCOGS_USERNAME,
+  DISCOGS_LIST: process.env.DISCOGS_LIST || 'wantlist',
 };

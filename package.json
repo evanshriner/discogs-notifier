@@ -9,6 +9,7 @@
   "author": "evan shriner",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.0"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
