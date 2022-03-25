@@ -7,4 +7,5 @@ module.exports = {
   DISCOGS_USER_AGENT: `${process.env.DISCOGS_USERNAME}Notifier/1.0`,
   DISCOGS_LIST: process.env.DISCOGS_LIST,
   UPDATE_INTERVAL: process.env.UPDATE_INTERVAL || 5,
+  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
 };
