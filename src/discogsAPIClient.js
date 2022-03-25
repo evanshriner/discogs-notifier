@@ -14,7 +14,7 @@ class DiscogsAPIClient {
   async getList(listId) {
     logger.debug(`requesting discogs list ${listId}`);
     const list = (await this.client.get(`/lists/${listId}`)).data;
-    logger.debug(list, 'successfully retrieved discogs list');
+    logger.debug({ data: list }, 'successfully retrieved discogs list');
     return list;
   }
 }
