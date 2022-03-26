@@ -1,42 +1,52 @@
 const process = require('process');
+const { clearInterval } = require('timers');
 const config = require('./config');
 const logger = require('./src/logger');
 
 const DiscogsAPIClient = require('./src/discogsAPIClient');
+const DiscogsWebClient = require('./src/discogsWebClient');
+
 const InMemoryStore = require('./src/inMemoryStore');
 
 const discogsAPIClient = new DiscogsAPIClient(
-  config.DISCOGS_BASE_URL,
+  config.DISCOGS_API_BASE_URL,
   config.USER_AGENT,
+);
+const discogsWebClient = new DiscogsWebClient(
+  config.DISCOGS_WEB_BASE_URL,
 );
 const inMemoryStore = new InMemoryStore();
 
+let pid;
+
 async function run() {
-  // ensure variables are set
+  logger.debug({ config }, 'deployed config');
   Object.keys(config).forEach((key) => {
     // this will fail if any falsy values are added to the config
-    logger.debug();
     if (!config[key]) {
       logger.error(`${key} needs to be defined`);
       throw new Error('fatal exception');
     }
   });
-  // connect to redis
 
   // connect to mailer
 
-  setInterval(async () => {
-    (await discogsAPIClient.getList(config.DISCOGS_LIST)).items.map((item) => {
+  pid = setInterval(async () => {
+    const list = (await discogsAPIClient.getList(config.DISCOGS_LIST)).items;
+    await Promise.all(list.map(async (item) => {
+      const history = inMemoryStore.get(item.id);
+      if (!history) {
+        inMemoryStore.set(item.id, item);
+        logger.info(`new item added to tracker from list ${item.display_title}`);
+        return Promise.resolve();
+      }
 
-    },
-      // check in memory store for item
-      // if not present, add it and be done
-      // if present
+      const listings = await discogsWebClient.getListingsForItem(item.id);
 
-      // go to discogs web and get all items and prices, sort by lowest price
-      // take all items that fit price definition
-
-    );
+      // notify, return email request as final promise
+    }));
+    // possibly use all settled to notify of errors with certain items.
+    logger.debug('completed loop');
   }, config.UPDATE_INTERVAL * 1000);
 }
 
@@ -44,7 +54,7 @@ if (require.main === module) {
   (async () => {
     try {
       process.on('SIGINT', () => {
-        // any graceful shutdown proceses
+        clearInterval(pid);
       });
 
       await run();
