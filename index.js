@@ -28,26 +28,30 @@ async function run() {
       throw new Error('fatal exception');
     }
   });
-
   // connect to mailer
 
-  pid = setInterval(async () => {
-    const list = (await discogsAPIClient.getList(config.DISCOGS_LIST)).items;
-    await Promise.all(list.map(async (item) => {
-      const history = inMemoryStore.get(item.id);
-      if (!history) {
-        inMemoryStore.set(item.id, item);
-        logger.info(`new item added to tracker from list ${item.display_title}`);
-        return Promise.resolve();
-      }
+  const list = (await discogsAPIClient.getList(config.DISCOGS_LIST)).items;
+  if (list) {
+    console.log(list);
+  }
 
-      const listings = await discogsWebClient.getListingsForItem(item.id);
+  // pid = setInterval(async () => {
+  //   const list = (await discogsAPIClient.getList(config.DISCOGS_LIST)).items;
+  //   await Promise.all(list.map(async (item) => {
+  //     const history = inMemoryStore.get(item.id);
+  //     if (!history) {
+  //       inMemoryStore.set(item.id, item);
+  //       logger.info(`new item added to tracker from list ${item.display_title}`);
+  //       return Promise.resolve();
+  //     }
 
-      // notify, return email request as final promise
-    }));
-    // possibly use all settled to notify of errors with certain items.
-    logger.debug('completed loop');
-  }, config.UPDATE_INTERVAL * 1000);
+  //     const listings = await discogsWebClient.getListingsForRelease(item.id);
+  //     const ooo = listings;
+  //     // notify, return email request as final promise
+  //   }));
+  //   // possibly use all settled to notify of errors with certain items.
+  //   logger.debug('completed loop');
+  // }, config.UPDATE_INTERVAL * 1000);
 }
 
 if (require.main === module) {
