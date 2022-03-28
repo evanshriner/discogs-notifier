@@ -10,7 +10,7 @@ const InMemoryStore = require('./src/inMemoryStore');
 
 const discogsAPIClient = new DiscogsAPIClient(
   config.DISCOGS_API_BASE_URL,
-  config.USER_AGENT,
+  config.DISCOGS_USER_AGENT,
 );
 const discogsWebClient = new DiscogsWebClient(
   config.DISCOGS_WEB_BASE_URL,
@@ -30,28 +30,46 @@ async function run() {
   });
   // connect to mailer
 
-  const list = (await discogsAPIClient.getList(config.DISCOGS_LIST)).items;
-  if (list) {
-    console.log(list);
-  }
+  pid = setInterval(async () => {
+    const list = (await discogsAPIClient.getList(config.DISCOGS_LIST)).items;
+    const promises = await Promise.allSettled(list.map(async (release) => {
+      const history = inMemoryStore.get(release.id);
+      if (!history) {
+        inMemoryStore.set(release.id, {
+          listings: {},
+          ...release,
+        });
+        logger.info(`new release added to tracker from list ${release.display_title}`);
+        return Promise.resolve();
+      }
 
-  // pid = setInterval(async () => {
-  //   const list = (await discogsAPIClient.getList(config.DISCOGS_LIST)).items;
-  //   await Promise.all(list.map(async (item) => {
-  //     const history = inMemoryStore.get(item.id);
-  //     if (!history) {
-  //       inMemoryStore.set(item.id, item);
-  //       logger.info(`new item added to tracker from list ${item.display_title}`);
-  //       return Promise.resolve();
-  //     }
+      const listings = await discogsWebClient.getListingsForRelease(release.id);
+      if (!listings) {
+        logger.debug(`release ${release.id} does not have any listings right now`);
+        return Promise.resolve();
+      }
+      const newListings = [];
+      listings.forEach((listing) => {
+        if (!history.listings[listing.id]
+          || (history.listings[listing.id].price.base !== listing.price.base)) {
+          history.listings[listing.id] = listing;
+          newListings.push(listing);
+        }
+      });
 
-  //     const listings = await discogsWebClient.getListingsForRelease(item.id);
-  //     const ooo = listings;
-  //     // notify, return email request as final promise
-  //   }));
-  //   // possibly use all settled to notify of errors with certain items.
-  //   logger.debug('completed loop');
-  // }, config.UPDATE_INTERVAL * 1000);
+      if (newListings.length) {
+        return Promise.resolve({
+          name: release.display_title,
+          listingPath: `${config.DISCOGS_WEB_BASE_URL}${newListings[0].id}`,
+          releasePath: `${config.DISCOGS_WEB_BASE_URL}/sell/release/${release.id}`,
+          totalNewListings: newListings.length,
+        });
+      }
+    }));
+
+    // go through all settled, log out errors, aggregate successes and send to gmail server
+    logger.debug('completed loop');
+  }, config.UPDATE_INTERVAL * 1000);
 }
 
 if (require.main === module) {
