@@ -31,19 +31,25 @@ class DiscogsWebClient {
       { transformResponse: (res) => res },
     )));
 
-    // todo: tbody can be null, if you add something that is not currently selling.
-    const tBody = (rootHtml.querySelector('.mpitems'))?.getElementsByTagName('tbody');
-
-    if (tBody) {
-
+    const items = (rootHtml.querySelector('.mpitems'))
+      .getElementsByTagName('tbody')[0]
+      .getElementsByTagName('tr');
+    if (!items.length) {
+      return null;
     }
+
     logger.debug(`found ${items.length} listings in page`);
 
     return items.map((item) => {
-      const itemCondition = item.querySelector('.item_description')
-        .querySelector('.item_condition');
+      const itemDescription = item.querySelector('.item_description');
+      const itemId = itemDescription
+        .getElementsByTagName('strong')[0]
+        .getElementsByTagName('a')[0]
+        .getAttribute('href');
+      const itemCondition = itemDescription.querySelector('.item_condition');
       const itemPrice = item.querySelector('.item_price');
       const mappedItem = {
+        id: itemId,
         condition: {
           media: (itemCondition.getElementsByTagName('span')[2]).text.replace(/^\s+|\s+$|\n/g, ''),
           sleeve: itemCondition.querySelector('.item_sleeve_condition') ? itemCondition.querySelector('.item_sleeve_condition').text : null,
