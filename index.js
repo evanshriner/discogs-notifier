@@ -97,7 +97,7 @@ async function run() {
 
       if (notifications.length) {
         await gmailClient.sendNotificationEmail(notifications);
-        logger.info('successfully sent email for new listings');
+        logger.info({ notifications }, 'successfully sent email for new listings');
       } else {
         logger.debug('no new notifications to be sent this iteration');
       }
