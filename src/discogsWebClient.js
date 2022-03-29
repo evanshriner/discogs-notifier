@@ -52,7 +52,7 @@ class DiscogsWebClient {
         id: itemId,
         condition: {
           media: (itemCondition.getElementsByTagName('span')[2]).text.replace(/^\s+|\s+$|\n/g, ''),
-          sleeve: itemCondition.querySelector('.item_sleeve_condition') ? itemCondition.querySelector('.item_sleeve_condition').text : null,
+          sleeve: itemCondition.querySelector('.item_sleeve_condition') ? itemCondition.querySelector('.item_sleeve_condition').text : 'N/A',
         },
         shipsFrom: item.querySelector('.seller_info')
           .getElementsByTagName('ul')[0]

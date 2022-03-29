@@ -4,9 +4,10 @@ const process = require('process');
 module.exports = {
   DISCOGS_API_BASE_URL: 'https://api.discogs.com',
   DISCOGS_WEB_BASE_URL: 'https://www.discogs.com',
-  DISCOGS_USERNAME: process.env.DISCOGS_USERNAME,
-  DISCOGS_USER_AGENT: `${process.env.DISCOGS_USERNAME}Notifier/1.0`,
+  GMAIL_EMAIL: process.env.GMAIL_EMAIL,
+  GMAIL_PASSWORD: process.env.GMAIL_PASSWORD,
+  DISCOGS_USER_AGENT: `${process.env.GMAIL_EMAIL}Notifier/1.0`,
   DISCOGS_LIST: process.env.DISCOGS_LIST,
   UPDATE_INTERVAL: process.env.UPDATE_INTERVAL || 10,
-  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
+  NOTIFIER_LOG_LEVEL: process.env.NOTIFIER_LOG_LEVEL || 'debug',
 };
