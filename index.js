@@ -103,8 +103,7 @@ async function run() {
       }
       logger.debug('completed iteration');
     } catch (e) {
-      logger.error(e, 'fatal error occurred');
-      process.kill(process.pid, 'SIGINT');
+      logger.error(e, 'error occurred inside iteration');
     }
   }, config.UPDATE_INTERVAL * 1000);
   logger.info('started discogs-notifier');
