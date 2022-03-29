@@ -23,7 +23,7 @@ add/edit/delete from your list to manage what you are emailed about.
     - If 2FA is enabled on your Gmail account, you must create an [app password](https://support.google.com/accounts/answer/185833?hl=en) to supply instead.
     - If issues arise when connecting to the mail server, attempt to allow the app via this [unlock captcha](https://accounts.google.com/b/0/displayunlockcaptcha).
 - (Optional) `UPDATE_INTERVAL` = the number of seconds in between rerunning the check.
-    - Discogs has a maximum of 25 rps. setting this value to be greater than 3 is not recommended and might cause unintended 429 responses from the discogs API.
+    - Discogs has a maximum of 25 rpm. setting this value to be greater than 3 is not recommended and might cause unintended 429 responses from the discogs API.
 - (Optional) `NOTIFIER_LOG_LEVEL` = if having issues, set the log level to `debug` for more granular logs.
 
 ## Deploying
@@ -38,5 +38,5 @@ node index.js
 ```
 ### From Docker
 ```bash
-docker run -e GMAIL_EMAIL="" -e GMAIL_PASSWORD="" -e DISCOGS_LIST=976316 evanshriner/discogs-notifier:alpha
+docker run -d -e GMAIL_EMAIL="" -e GMAIL_PASSWORD="" -e DISCOGS_LIST=976316 evanshriner/discogs-notifier:alpha
 ```
