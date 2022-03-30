@@ -35,6 +35,10 @@ Copy the .env file and fill out the appropriate values.
 ```bash
 cp .env .env.local
 ```
+Install dependencies
+```bash
+npm i
+```
 Start the process.
 ```bash
 npm run-script dev
