@@ -91,9 +91,12 @@ async function run() {
       promises.filter((promise) => promise.status === 'rejected').forEach((reject) => {
         logger.error(`error occured when trying to update a release in the list: ${reject.reason}`);
       });
-      const notifications = promises.filter(
-        (promise) => promise.status === 'fulfilled' && promise.value != null,
-      ).map((promise) => promise.value);
+      const notifications = promises
+        .filter(
+          (promise) => promise.status === 'fulfilled' && promise.value != null,
+        )
+        .map((promise) => promise.value)
+        .filter((notification) => (notification.shipsFrom === config.COUNTRY_FILTER) || config.COUNTRY_FILTER === 'none');
 
       if (notifications.length) {
         await gmailClient.sendNotificationEmail(notifications);
