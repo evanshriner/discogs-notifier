@@ -25,8 +25,8 @@ See 'Deploying' below for setup instructions.
     - If 2FA is enabled on your Gmail account, you must create an [app password](https://support.google.com/accounts/answer/185833?hl=en) to supply instead. **On May 30, 2022, this will be a [requirement](https://support.google.com/accounts/answer/6010255).** 
     - If issues arise when connecting to the mail server, attempt to allow the app via this [unlock captcha](https://accounts.google.com/b/0/displayunlockcaptcha).
 - (Optional) `COUNTRY_FILTER` = recieve listing notifications only from the specified country. **Must show up exactly as it does in Discogs (I recommend just copy and pasting from there)**
-- (Optional) `UPDATE_INTERVAL` = the number of seconds in between rerunning the check.
-    - Discogs has a maximum of 25 rpm. setting this value to be greater than 3 is not recommended and might cause unintended 429 responses from the discogs API.
+- (Optional) `UPDATE_INTERVAL` = the number of seconds in between rerunning the check. (Default is 10)
+    - Discogs has a maximum of 25 rpm. setting this value to be less than 3 is not recommended and might cause unintended 429 responses from the discogs API.
 - (Optional) `NOTIFIER_LOG_LEVEL` = if having issues, set the log level to `debug` for more granular logs.
 
 ## Deploying
