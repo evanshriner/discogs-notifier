@@ -6,10 +6,11 @@ self hosted check for immediate listing emails on a **public** list of your choo
 add/edit/delete from your list to manage what you are emailed about. 
 
 ## Prerequisites
-* [Docker](https://docs.docker.com/get-docker/) (if using the prebuilt image) or [Node](https://nodejs.org/en/download/) (if running from source).
+* [Docker](https://docs.docker.com/get-docker/) (if using the prebuilt image, which is recommended) or [Node](https://nodejs.org/en/download/) (if running from source).
 * A Gmail account to send / recieve emails
 * A public [Discogs list](https://support.discogs.com/hc/en-us/articles/360001567973-How-To-Make-A-List#:~:text=You%20can%20switch%20a%20list,other%20areas%20on%20the%20site.) 
 
+See 'Deploying' below for setup instructions.
 ## Limitations
 * Gmail only.
 * currently does not support entire wantlists.
