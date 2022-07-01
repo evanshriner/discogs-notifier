@@ -21,6 +21,7 @@ See 'Deploying' below for setup instructions.
 ## Parameters
 - (Required)  `DISCOGS_LIST` = the list of releases to be notified on.
 - (Required)  `GMAIL_EMAIL` = the email address where notifications will go.
+- (Optional) `GMAIL_PORT` = defaults to 465, but can be changed if having security issues.
 - (Required)  `GMAIL_PASSWORD` = the password of the email account.
     - If 2FA is enabled on your Gmail account, you must create an [app password](https://support.google.com/accounts/answer/185833?hl=en) to supply instead. **On May 30, 2022, this will be a [requirement](https://support.google.com/accounts/answer/6010255).** 
     - If issues arise when connecting to the mail server, attempt to allow the app via this [unlock captcha](https://accounts.google.com/b/0/displayunlockcaptcha).
