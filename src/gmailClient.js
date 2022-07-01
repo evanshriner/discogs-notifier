@@ -3,11 +3,11 @@ const logger = require('./logger');
 const EmailGenerator = require('./emailGenerator');
 
 class GmailClient {
-  constructor(user, pass) {
+  constructor(user, pass, port) {
     this.user = user;
     this.transport = nodemailer.createTransport({
       host: 'smtp.gmail.com',
-      port: 465,
+      port,
       secure: true,
       auth: {
         user,

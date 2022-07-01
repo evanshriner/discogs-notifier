@@ -6,6 +6,7 @@ module.exports = {
   DISCOGS_WEB_BASE_URL: 'https://www.discogs.com',
   GMAIL_EMAIL: process.env.GMAIL_EMAIL,
   GMAIL_PASSWORD: process.env.GMAIL_PASSWORD,
+  GMAIL_PORT: process.env.GMAIL_PORT || 465,
   DISCOGS_USER_AGENT: `${process.env.GMAIL_EMAIL}Notifier/1.0`,
   DISCOGS_LIST: process.env.DISCOGS_LIST,
   UPDATE_INTERVAL: process.env.UPDATE_INTERVAL || 10,
