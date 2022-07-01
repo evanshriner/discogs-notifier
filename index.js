@@ -91,20 +91,22 @@ async function run() {
       promises.filter((promise) => promise.status === 'rejected').forEach((reject) => {
         logger.error(`error occured when trying to update a release in the list: ${reject.reason}`);
       });
-      const notifications = promises.filter(
-        (promise) => promise.status === 'fulfilled' && promise.value != null,
-      ).map((promise) => promise.value);
+      const notifications = promises
+        .filter(
+          (promise) => promise.status === 'fulfilled' && promise.value != null,
+        )
+        .map((promise) => promise.value)
+        .filter((notification) => (notification.shipsFrom === config.COUNTRY_FILTER) || config.COUNTRY_FILTER === 'none');
 
       if (notifications.length) {
         await gmailClient.sendNotificationEmail(notifications);
-        logger.info('successfully sent email for new listings');
+        logger.info({ notifications }, 'successfully sent email for new listings');
       } else {
         logger.debug('no new notifications to be sent this iteration');
       }
       logger.debug('completed iteration');
     } catch (e) {
-      logger.error(e, 'fatal error occurred');
-      process.kill(process.pid, 'SIGINT');
+      logger.error(e, 'error occurred inside iteration');
     }
   }, config.UPDATE_INTERVAL * 1000);
   logger.info('started discogs-notifier');
